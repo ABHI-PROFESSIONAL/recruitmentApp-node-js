@@ -14,3 +14,12 @@
 4. There is both local and remote Database support in application
     a) Default is remote Database , so application can run independently with proper internet connection i.e no need to have Database
     b)For local Database kindly change the configuration like (username,Database,password)
+
+
+
+
+
+*
+*
+*
+    ####      End of File    #####
