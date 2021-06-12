@@ -55,7 +55,7 @@ app.post('/recruitmentApp/createCandidate',(req,res)=>{
             name:req.body.name,
             email:req.body.email
         }
-        dbConnection.mysqlConnection.query('insert into candidate set ?',candidate,(err,result)=>{
+        dbConnection.remotemysqlConnection.query('insert into candidate set ?',candidate,(err,result)=>{
             if(err)
                 return res.status(500)
            else
@@ -83,7 +83,7 @@ app.post('/recruitmentApp/addScore',(req,res)=>{
             third_round:req.body.third_round 
         }
 
-        dbConnection.mysqlConnection.query('insert into test_score set ?',test_score,(err,result)=>{
+        dbConnection.remotemysqlConnection.query('insert into test_score set ?',test_score,(err,result)=>{
             if(err)
                 return res.status(500)
             else
@@ -103,15 +103,16 @@ app.get('/recruitmentApp/getAllAverageScore',(req,res)=>{
     var heighestScoreCandidate={}
     var averageScorePerRound={}
 
-    dbConnection.mysqlConnection.query('select * from candidate',(err,rows)=>{
+    dbConnection.remotemysqlConnection.query('select * from candidate',(err,rows)=>{
         if(err)
         return res.status(500).send('Somthing went wrong while retriving records from db')
         else
         {
-            console.log('inside else aprt..')
-            dbConnection.mysqlConnection.query('select email,max(first_round+second_round+third_round) as Max_Marks from test_score',(err,result1)=>{
+           
+            dbConnection.remotemysqlConnection.query(' select email,first_round+second_round+third_round Max_Marks from test_score order by first_round+second_round+third_round desc limit 0,1',(err,result1)=>
+            {
                 if(err)
-                    return res.status(500)
+                    return res.status(500).send('Somthing went wrong while retriving records from db')
                 else
                 {
                     heighestScoreCandidate={
@@ -124,16 +125,17 @@ app.get('/recruitmentApp/getAllAverageScore',(req,res)=>{
                 
             })
 
-            dbConnection.mysqlConnection.query('select avg(first_round) as avg_f_r,avg(second_round) as avg_s_r,avg(third_round) as avg_t_r from test_score',(err,result2)=>{
+            dbConnection.remotemysqlConnection.query('select avg(first_round) as avg_f_r,avg(second_round) as avg_s_r,avg(third_round) as avg_t_r from test_score',(err,result2)=>
+            {
                 if(err)
-                    return res.status(500)
+                    return res.status(500).send('Somthing went wrong while retriving records from db')
                     else
                     {
                         averageScorePerRound={
                             title:'Average score per round for all candidates',
                             first_round:result2[0].avg_f_r,
                             second_round:result2[0].avg_s_r,
-                            first_round:result2[0].avg_t_r,
+                            third_round:result2[0].avg_t_r,
                         }
                       
                        myRes[1]=averageScorePerRound
@@ -141,11 +143,16 @@ app.get('/recruitmentApp/getAllAverageScore',(req,res)=>{
                       
                     }
             })
-        }
-       
-    })
+       }
+        
+   })
+
 
 })
+
+
+
+
 
 
 

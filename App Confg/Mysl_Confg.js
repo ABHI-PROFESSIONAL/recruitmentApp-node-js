@@ -12,21 +12,35 @@ var mysqlConnection =mysql.createConnection(
     }
 );
 
-module.exports.mysqlConnection=mysqlConnection
+// mysqlConnection.connect((err)=>{
+//     if(!err)
+//     console.log('Databse Connection Succeed..');
+//     else
+//     console.log('Db connection failed \n'+JSON.stringify(err));
+// });
 
+var remotemysqlConnection =mysql.createConnection(
+    {
+        host:'remotemysql.com',
+        user:'ozNnFIQzfs',
+        password:'2oxRHwO7Im',
+        database:'ozNnFIQzfs'
+    }
+);
 
-mysqlConnection.connect((err)=>{
+remotemysqlConnection.connect((err)=>{
     if(!err)
-    console.log('Databse Connection Succeed..');
+    console.log('Remote Databse Connection Succeed..');
     else
     console.log('Db connection failed \n'+JSON.stringify(err));
 });
 
-// mysqlConnection.query('select * from candidate',(err,rows,fields)=>{
+// remotemysqlConnection.query('select * from candidate',(err,rows,fields)=>{
 //     if(!err)
 //    console.log(rows)
-//     else
-//     console.log(err)
-// })
+//      else
+//      console.log(err)
+//  })
 
-
+module.exports.mysqlConnection=mysqlConnection
+module.exports.remotemysqlConnection=remotemysqlConnection
